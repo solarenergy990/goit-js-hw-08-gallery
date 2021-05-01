@@ -36,6 +36,9 @@ const onImgClick = (evt) => {
     return;
   }
 
+  refs.lightBox.addEventListener("click", onButtonCloseOrOverlayClick);
+  window.addEventListener("keydown", onEscButtonPress);
+
   refs.lightBox.classList.add("is-open");
   refs.lightBoxImg.src = evt.target.dataset.source;
   refs.lightBoxImg.alt = evt.target.alt;
@@ -47,6 +50,9 @@ const onButtonCloseOrOverlayClick = (evt) => {
   }
   refs.lightBox.classList.remove("is-open");
   refs.lightBoxImg.src = "";
+
+  refs.lightBox.removeEventListener("click", onButtonCloseOrOverlayClick);
+  window.removeEventListener("keydown", onEscButtonPress);
 };
 
 const onEscButtonPress = (evt) => {
@@ -69,6 +75,5 @@ const onEscButtonPress = (evt) => {
 // };
 
 refs.galleryContainer.addEventListener("click", onImgClick);
-refs.lightBox.addEventListener("click", onButtonCloseOrOverlayClick);
-window.addEventListener("keydown", onEscButtonPress);
+
 // window.addEventListener("keydown", swipeGalleryByArrows);
