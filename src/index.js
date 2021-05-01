@@ -44,21 +44,23 @@ const onImgClick = (evt) => {
   refs.lightBoxImg.alt = evt.target.alt;
 };
 
-const onButtonCloseOrOverlayClick = (evt) => {
-  if (evt.target.classList.contains("lightbox__image")) {
-    return;
-  }
+const onClosingLightbox = () => {
   refs.lightBox.classList.remove("is-open");
   refs.lightBoxImg.src = "";
-
   refs.lightBox.removeEventListener("click", onButtonCloseOrOverlayClick);
   window.removeEventListener("keydown", onEscButtonPress);
 };
 
+const onButtonCloseOrOverlayClick = (evt) => {
+  if (evt.target.classList.contains("lightbox__image")) {
+    return;
+  }
+  onClosingLightbox();
+};
+
 const onEscButtonPress = (evt) => {
   if (evt.key === "Escape") {
-    refs.lightBox.classList.remove("is-open");
-    refs.lightBoxImg.src = "";
+    onClosingLightbox();
   }
 };
 
