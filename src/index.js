@@ -1,4 +1,5 @@
 import gallery from "./gallery-items.js";
+
 const refs = {
   buttonCloseLightbox: document.querySelector(".lightbox__button"),
   lightBox: document.querySelector(".js-lightbox"),
