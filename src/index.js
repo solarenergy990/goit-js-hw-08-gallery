@@ -9,7 +9,7 @@ const refs = {
 
 const createGalleryMarkup = (gallery) => {
   return gallery
-    .map(({ preview, original, description }) => {
+    .map(({ preview, original, description }, idx) => {
       return `<li class="gallery__item">
   <a
     class="gallery__link"
@@ -19,6 +19,7 @@ const createGalleryMarkup = (gallery) => {
       class="gallery__image"
       src="${preview}"
       data-source="${original}"
+      data-index="${idx}"
       alt="${description}"
     />
   </a>
@@ -30,6 +31,8 @@ const createGalleryMarkup = (gallery) => {
 const galleryMarkup = createGalleryMarkup(gallery);
 refs.galleryContainer.insertAdjacentHTML("beforeend", galleryMarkup);
 
+let dataIndex = 0;
+
 const onImgClick = (evt) => {
   evt.preventDefault();
 
@@ -37,8 +40,11 @@ const onImgClick = (evt) => {
     return;
   }
 
+  dataIndex = Number(evt.target.dataset.index);
+
   refs.lightBox.addEventListener("click", onButtonCloseOrOverlayClick);
   window.addEventListener("keydown", onEscButtonPress);
+  window.addEventListener("keydown", onArrowPress);
 
   refs.lightBox.classList.add("is-open");
   refs.lightBoxImg.src = evt.target.dataset.source;
@@ -50,6 +56,7 @@ const onClosingLightbox = () => {
   refs.lightBoxImg.src = "";
   refs.lightBox.removeEventListener("click", onButtonCloseOrOverlayClick);
   window.removeEventListener("keydown", onEscButtonPress);
+  window.removeEventListener("keydown", onArrowPress);
 };
 
 const onButtonCloseOrOverlayClick = (evt) => {
@@ -65,18 +72,23 @@ const onEscButtonPress = (evt) => {
   }
 };
 
-// const swipeGalleryByArrows = (evt) => {
-//   let defaultImgIndex = 0;
-//   const swipedImgs = gallery.forEach((element) => {
-//     if (evt.key === "ArrowRight") {
-//       refs.lightBoxImg.src = element.original;
-//     }
+const onArrowPress = (evt) => {
+  if (evt.code === "ArrowRight") {
+    dataIndex += 1;
+  }
+  if (evt.code === "ArrowLeft") {
+    dataIndex -= 1;
+  }
+  if (dataIndex > 8) {
+    dataIndex = 0;
+  }
+  if (dataIndex < 0) {
+    dataIndex = 8;
+  }
 
-//     // console.log(element);
-//   });
-//   //   console.log(swipedImgs);
-// };
+  refs.lightBoxImg.dataset.index = dataIndex;
+  refs.lightBoxImg.src = gallery[dataIndex].original;
+  refs.lightBoxImg.alt = gallery[dataIndex].description;
+};
 
 refs.galleryContainer.addEventListener("click", onImgClick);
-
-// window.addEventListener("keydown", swipeGalleryByArrows);
