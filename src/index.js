@@ -79,11 +79,11 @@ const onArrowPress = (evt) => {
   if (evt.code === "ArrowLeft") {
     dataIndex -= 1;
   }
-  if (dataIndex > 8) {
+  if (dataIndex > gallery.length - 1) {
     dataIndex = 0;
   }
   if (dataIndex < 0) {
-    dataIndex = 8;
+    dataIndex = gallery.length - 1;
   }
 
   refs.lightBoxImg.dataset.index = dataIndex;
